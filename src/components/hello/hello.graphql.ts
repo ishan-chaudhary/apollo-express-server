@@ -1,7 +1,6 @@
 import { IResolvers } from 'graphql-tools';
 import { GraphQLResolveInfo } from 'graphql';
-import { Context } from '../models/context';
-import { Hello } from '../models/hello';
+import { Hello } from './hello.interface';
 
 export const typeDef = `
   type Hello{

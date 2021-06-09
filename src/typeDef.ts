@@ -1,4 +1,4 @@
-import { typeDef as helloDef } from './schema/hello';
+import { typeDef as helloDef } from './components/hello/hello.graphql';
 
 const Query = `
   type Query {
