@@ -13,7 +13,6 @@ const server = new ApolloServer({
   validationRules: [depthLimit(7)],
   playground: true,
   context: async ({ req }) => {
-    console.log(req.headers.authorization);
     let user = await User.fetchUserByToken(req.headers.authorization || null);
     return { user };
   },

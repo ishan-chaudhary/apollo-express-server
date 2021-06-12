@@ -16,7 +16,7 @@ export const typeDef = `
     user(id:ID):User
   }
   extend type Mutation{
-    addUser(email:String,password:String,firstName:String):User
+    addUser(email:String,!password:String!,firstName:String!):User
   }
 `;
 
