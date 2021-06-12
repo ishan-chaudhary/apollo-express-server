@@ -15,8 +15,13 @@ export const typeDef = `
       completed:Boolean
     }
 
+    input newTask{
+      title:String! , user : String! , comment: String , startDate: String , endDate: String
+    }
+
     extend type Mutation{
-      addTask(title:String! , user : String! , comment: String , startDate: String , endDate: String):Task
+      addTask(task:newTask):Task,
+      deleteTask(id:ID!):Task
     }
 
     extend type Query{
@@ -39,8 +44,11 @@ export const resolver: IResolvers = {
     },
   },
   Mutation: {
-    addTask: async (_: void, args: ITask, ctx: Context, info: GraphQLResolveInfo) => {
-      return await Task.create(args);
+    addTask: async (_: void, { task }: { task: ITask }, ctx: Context, info: GraphQLResolveInfo) => {
+      return await Task.create(task);
+    },
+    deleteTask: async (_: void, { id }: { id: string }, ctx: Context, info: GraphQLResolveInfo) => {
+      return await Task.deleteTask(id);
     },
   },
   Task: {

@@ -1,6 +1,6 @@
 import User from './user.schema';
 import { IUser, IUserModel } from './user.interface';
-import { generateToken } from '../../lib/helpers/index';
+import { generateToken, verifyToken } from '../../lib/helpers/index';
 
 class UserModel {
   public async create(user: IUser): Promise<IUserModel> {
@@ -16,6 +16,15 @@ class UserModel {
     let data = await User.findById(id).lean();
     return data;
   };
+
+  public async fetchUserByToken(token: string | null) {
+    if (token) {
+      let { user }: any = await verifyToken(token.split(' ')[1]);
+      return await User.findById(user.id);
+    } else {
+      return {};
+    }
+  }
 }
 
 export default new UserModel();

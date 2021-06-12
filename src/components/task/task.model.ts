@@ -14,6 +14,10 @@ class TaskModel {
   public async fetchAllTasks() {
     return await Task.find().lean();
   }
+
+  public async deleteTask(id: string) {
+    return await Task.findByIdAndDelete(id).lean();
+  }
 }
 
 export default new TaskModel();

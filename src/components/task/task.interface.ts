@@ -5,7 +5,7 @@ export interface ITask {
   title: string;
   user: IUserModel['_id'];
   startDate: string;
-  enddate: string;
+  endDate: string;
   completed?: boolean;
   comment?: string;
 }
