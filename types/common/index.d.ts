@@ -1,3 +1,3 @@
 interface Context {
-  jwt?: string;
+  user?: { _id: string };
 }

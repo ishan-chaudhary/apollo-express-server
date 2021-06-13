@@ -3,6 +3,7 @@ import { GraphQLResolveInfo } from 'graphql';
 import Task from './task.model';
 import User from '../user/user.model';
 import { ITask } from './task.interface';
+import { ApolloError } from 'apollo-server-express';
 
 export const typeDef = `
     type Task{
@@ -16,7 +17,7 @@ export const typeDef = `
     }
 
     input newTask{
-      title:String! , user : String! , comment: String , startDate: String , endDate: String
+      title:String! , comment: String , startDate: String , endDate: String
     }
 
     extend type Mutation{
@@ -25,7 +26,7 @@ export const typeDef = `
     }
 
     extend type Query{
-      getTask(id:ID!):Task,
+      getTask:[Task],
       allTasks:[Task]
     }
 
@@ -36,16 +37,25 @@ export const typeDef = `
 
 export const resolver: IResolvers = {
   Query: {
-    getTask: async (_: void, { user }: { user: string }, ctx: Context, info: GraphQLResolveInfo) => {
-      return await Task.fetchTask(user);
+    getTask: async (_: void, args: any, { user }: Context, info: GraphQLResolveInfo) => {
+      if (user) {
+        return await Task.fetchTask(user._id);
+      } else {
+        throw new ApolloError('Not Authorised');
+      }
     },
     allTasks: async (_: void, { user }: { user: string }, ctx: Context, info: GraphQLResolveInfo) => {
       return await Task.fetchAllTasks();
     },
   },
   Mutation: {
-    addTask: async (_: void, { task }: { task: ITask }, ctx: Context, info: GraphQLResolveInfo) => {
-      return await Task.create(task);
+    addTask: async (_: void, { task }: { task: ITask }, { user }: Context, info: GraphQLResolveInfo) => {
+      if (user) {
+        task.user = user._id;
+        return await Task.create(task);
+      } else {
+        throw new ApolloError('Not Authorised');
+      }
     },
     deleteTask: async (_: void, { id }: { id: string }, ctx: Context, info: GraphQLResolveInfo) => {
       return await Task.deleteTask(id);
