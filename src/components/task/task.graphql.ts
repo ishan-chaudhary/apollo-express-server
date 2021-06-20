@@ -3,7 +3,9 @@ import { GraphQLResolveInfo } from 'graphql';
 import Task from './task.model';
 import User from '../user/user.model';
 import { ITask } from './task.interface';
-import { ApolloError } from 'apollo-server-express';
+import { AuthenticationError } from 'apollo-server-express';
+import 'apollo-cache-control';
+import { CacheScope } from 'apollo-cache-control';
 
 export const typeDef = `
     type Task{
@@ -39,9 +41,10 @@ export const resolver: IResolvers = {
   Query: {
     getTask: async (_: void, args: any, { user }: Context, info: GraphQLResolveInfo) => {
       if (user) {
+        info.cacheControl.setCacheHint({ maxAge: 60, scope: CacheScope.Private });
         return await Task.fetchTask(user._id);
       } else {
-        throw new ApolloError('Not Authorised');
+        throw new AuthenticationError('Not Authorised');
       }
     },
     allTasks: async (_: void, { user }: { user: string }, ctx: Context, info: GraphQLResolveInfo) => {
@@ -54,7 +57,7 @@ export const resolver: IResolvers = {
         task.user = user._id;
         return await Task.create(task);
       } else {
-        throw new ApolloError('Not Authorised');
+        throw new AuthenticationError('Not Authorised');
       }
     },
     deleteTask: async (_: void, { id }: { id: string }, ctx: Context, info: GraphQLResolveInfo) => {

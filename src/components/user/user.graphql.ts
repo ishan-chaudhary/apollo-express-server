@@ -17,21 +17,30 @@ export const typeDef = `
   }
   extend type Mutation{
     addUser(email:String,!password:String!,firstName:String!):User
+    logInUser(email:String!,password:String!):User
   }
 `;
 
 export const resolver: IResolvers = {
   Query: {
-    users: (_: void, args: void, ctx: Context, info: GraphQLResolveInfo) => {
-      return User.fetchAllUsers();
+    users: async (_: void, args: void, ctx: Context, info: GraphQLResolveInfo) => {
+      return await User.fetchAllUsers();
     },
-    user: (_: void, { id }: { id: string }, ctx: Context, info: GraphQLResolveInfo) => {
-      return User.fetchUser(id);
+    user: async (_: void, { id }: { id: string }, ctx: Context, info: GraphQLResolveInfo) => {
+      return await User.fetchUser(id);
     },
   },
   Mutation: {
-    addUser: (_: void, { email, password, firstName }: IUser, ctx: Context, info: GraphQLResolveInfo) => {
-      return User.create({ firstName, email, password });
+    addUser: async (
+      _: void,
+      { email, password, firstName }: IUser,
+      ctx: Context,
+      info: GraphQLResolveInfo
+    ) => {
+      return await User.create({ firstName, email, password });
+    },
+    logInUser: async (_: void, { email, password }: IUser, ctx: Context, info: GraphQLResolveInfo) => {
+      return await User.logIn(email, password);
     },
   },
 };

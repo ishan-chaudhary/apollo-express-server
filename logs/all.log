@@ -1,0 +1,7 @@
+2021-06-20 14:48:17:4817 [31merror[39m: [31mField Query.getTask took 0ms.[39m
+[31m It failed with AuthenticationError: Not Authorised[39m
+2021-06-20 14:50:14:5014 [31merror[39m: [31mField Query.getTask took 0ms.[39m
+[31m It failed with AuthenticationError: Not Authorised[39m
+2021-06-20 14:52:27:5227 [31merror[39m: [31mField Query.getTask took 0ms.[39m
+[31m It failed with AuthenticationError: Not Authorised[39m
+2021-06-20 14:55:45:5545 [37mdebug[39m: [37mUsing .env file to supply config environment variables[39m
