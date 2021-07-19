@@ -10,6 +10,12 @@ import ErrorLogs from './lib/utils/winston';
 import { DatabaseError } from './lib/utils/errorHandler';
 
 const app: express.Application = express();
+
+app.use((req, res, next) => {
+  res.set('Cross-Origin-Resource-Policy', 'cross-origin');
+  next();
+});
+
 const server = new ApolloServer({
   schema,
   validationRules: [depthLimit(7)],
